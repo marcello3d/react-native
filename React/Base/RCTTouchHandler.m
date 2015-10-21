@@ -150,6 +150,14 @@ typedef NS_ENUM(NSInteger, RCTTouchEventType) {
   reactTouch[@"locationX"] = @(touchViewLocation.x);
   reactTouch[@"locationY"] = @(touchViewLocation.y);
   reactTouch[@"timestamp"] =  @(nativeTouch.timestamp * 1000); // in ms, for JS
+  if ([nativeTouch respondsToSelector:@selector(force)]) {
+    reactTouch[@"force"] = @(nativeTouch.force);
+    reactTouch[@"maximumPossibleForce"] = @(nativeTouch.maximumPossibleForce);
+  }
+  if ([nativeTouch respondsToSelector:@selector(majorRadius)]) {
+    reactTouch[@"majorRadius"] = @(nativeTouch.majorRadius);
+    reactTouch[@"majorRadiusTolerance"] = @(nativeTouch.majorRadiusTolerance);
+  }
 }
 
 /**
