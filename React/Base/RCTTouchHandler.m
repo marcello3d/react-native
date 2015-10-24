@@ -150,6 +150,17 @@ typedef NS_ENUM(NSInteger, RCTTouchEventType) {
   reactTouch[@"locationX"] = @(touchViewLocation.x);
   reactTouch[@"locationY"] = @(touchViewLocation.y);
   reactTouch[@"timestamp"] =  @(nativeTouch.timestamp * 1000); // in ms, for JS
+
+  if ([nativeTouch respondsToSelector:@selector(preciseLocationInView:)]) {
+    CGPoint preciseLocation = [nativeTouch preciseLocationInView:nativeTouch.window];
+    CGPoint preciseRootViewLocation = [nativeTouch.window convertPoint:preciseLocation toView:self.view];
+    CGPoint preciseTouchViewLocation = [nativeTouch.window convertPoint:preciseLocation toView:touchView];
+    reactTouch[@"precisePageX"] = @(preciseRootViewLocation.x);
+    reactTouch[@"precisePageY"] = @(preciseRootViewLocation.y);
+    reactTouch[@"preciseLocationX"] = @(preciseTouchViewLocation.x);
+    reactTouch[@"preciseLocationY"] = @(preciseTouchViewLocation.y);
+  }
+
   if ([nativeTouch respondsToSelector:@selector(force)]) {
     reactTouch[@"force"] = @(nativeTouch.force);
     reactTouch[@"maximumPossibleForce"] = @(nativeTouch.maximumPossibleForce);
@@ -157,6 +168,13 @@ typedef NS_ENUM(NSInteger, RCTTouchEventType) {
   if ([nativeTouch respondsToSelector:@selector(majorRadius)]) {
     reactTouch[@"majorRadius"] = @(nativeTouch.majorRadius);
     reactTouch[@"majorRadiusTolerance"] = @(nativeTouch.majorRadiusTolerance);
+  }
+  
+  if ([nativeTouch respondsToSelector:@selector(azimuthUnitVectorInView:)]) {
+    CGVector azimuth = [nativeTouch azimuthUnitVectorInView:touchView];
+    reactTouch[@"azimuthDX"] = @(azimuth.dx);
+    reactTouch[@"azimuthDY"] = @(azimuth.dy);
+    reactTouch[@"altitudeAngle"] = @(nativeTouch.altitudeAngle);
   }
 }
 
